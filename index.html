@@ -5,47 +5,62 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   </head>
   <body>
-
-    <h1 id='glenn-heard'></h1>
+    <h1>Hi, my name is GLENN!</h1>
+    <h3 id='glenn-heard'></h3>
     <h2 id='now-playing'></h2>
       </body>
    <script>
 
     var searchSong = function(query){
-           $.ajax({
-            url: 'https://api.spotify.com/v1/search',
-            data: {
-                q: query,
-                type: 'track'
-            },
-            success: function (response) {
+     $.ajax({
+      url: 'https://api.spotify.com/v1/search',
+      data: {
+          q: query,
+          type: 'track'
+      },
+      success: function (response) {
+          if (response.tracks.items.length) {
               console.log(response.tracks.items[0].name);
-                if (response.tracks.items.length) {
-                    $('#glenn-heard').html("GLENN heard " + query);
-                    $('#now-playing').html("Playing " + response.tracks.items[0].name);
-                    var track = response.tracks.items[0];
-                    var preview_song = new Audio(track.preview_url);
-                    preview_song.play();
-            }
-         }})
-         };
-           
+              $('#glenn-heard').html("GLENN heard " + query);
+              $('#now-playing').html("Playing " + response.tracks.items[0].name);
+              var track = response.tracks.items[0];
+              var preview_song = new Audio(track.preview_url);
+              preview_song.play();
+          }
+       },
+      error: function(){
+          $('#glenn-heard').html("Sorry I don't understand");
+      }
+    })
+   };
+
+      var searchSongWithArtist = function(songName, artistName) {
+        var query = songName;
+        if (artistName) {
+            query += ' artist:' + artistName;
+            console.log(query);
+        }
+        searchSong(query);
+      }
 
         if (annyang) {
           var commands = {
-              'play': function() {
+            'play': function() {
               console.log('play');
             },
-                'yes': function() {
+            'yes': function() {
               console.log('yes');
             },
 
-             'play *song': function (song) {
+            'play *song': function (song) {
               console.log(song);
               searchSong(song);
             },
 
-
+            'play *song by *artist': function (song, artist) {
+                console.log('Play song ' + song + ' by ' + artist);
+                searchSongWithArtist(song, artist);
+            },
           };
 
           // Add our commands to annyang
