@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/annyang/1.1.0/annyang.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  </head>
+  <body>
+
+    <h1 id='glenn-heard'></h1>
+    <h2 id='now-playing'></h2>
+      </body>
+   <script>
+
+    var searchSong = function(query){
+           $.ajax({
+            url: 'https://api.spotify.com/v1/search',
+            data: {
+                q: query,
+                type: 'track'
+            },
+            success: function (response) {
+              console.log(response.tracks.items[0].name);
+                if (response.tracks.items.length) {
+                    $('#glenn-heard').html("GLENN heard " + query);
+                    $('#now-playing').html("Playing " + response.tracks.items[0].name);
+                    var track = response.tracks.items[0];
+                    var preview_song = new Audio(track.preview_url);
+                    preview_song.play();
+            }
+         }})
+         };
+           
+
+        if (annyang) {
+          var commands = {
+              'play': function() {
+              console.log('play');
+            },
+                'yes': function() {
+              console.log('yes');
+            },
+
+             'play *song': function (song) {
+              console.log(song);
+              searchSong(song);
+            },
+
+
+          };
+
+          // Add our commands to annyang
+          annyang.addCommands(commands);
+          // Start listening. You can call this here, or attach this call to an event, button, etc.
+          annyang.start();
+        }
+
+</script>
+</html>
+
+
