@@ -10,6 +10,7 @@
     <h2 id='now-playing'></h2>
       </body>
    <script>
+      const token = 'BQAOpC-T-tJxq7jT72SUMTd_I94vmC9_zd2i410mYTX8N32RtdPrEpjWGGQFQ_ljfZ5PQ7VhpoA8nep-YlVv2hXHG-ZE2oejmNUPdU6f0XNGA7ZOcUlwYy6VHD5x5m6fW5cJZ6_BPV4';
 
     var searchSong = function(query){
      $.ajax({
@@ -18,6 +19,9 @@
           q: query,
           type: 'track'
       },
+       headers: {
+        'Authorization' : 'Bearer ' + token,
+    },
       success: function (response) {
           if (response.tracks.items.length) {
               console.log(response.tracks.items[0].name);
@@ -44,12 +48,17 @@
       }
 
         if (annyang) {
+          console.log("annyang ok");
+
           var commands = {
             'play': function() {
               console.log('play');
             },
             'yes': function() {
               console.log('yes');
+            },
+               'hello': function() {
+              console.log('hello');
             },
 
             'play *song': function (song) {
@@ -67,7 +76,7 @@
           annyang.addCommands(commands);
           // Start listening. You can call this here, or attach this call to an event, button, etc.
           annyang.start();
-        }
+      }
 
 </script>
 </html>
