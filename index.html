@@ -57,15 +57,20 @@
             'yes': function() {
               console.log('yes');
             },
-               'hello': function() {
-              console.log('hello');
+            
+            'hello *test': function(test) {
+              console.log("input " + test);
+              if(test == 'test'){
+                console.log('hello test');
+              }else{ 
+                console.log('hello no test');
+              } 
+              
             },
-
             'play *song': function (song) {
               console.log(song);
               searchSong(song);
             },
-
             'play *song by *artist': function (song, artist) {
                 console.log('Play song ' + song + ' by ' + artist);
                 searchSongWithArtist(song, artist);
