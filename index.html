@@ -120,7 +120,21 @@
 
        // document.location.href = 'Labeling.php';
     }
+    
+    function textToSpeech(text, language) {
+      var voicelist = responsiveVoice.getVoices();
+      var responseLanguage = 'US English Male';
+      Object.keys(voicelist).forEach(function(key) {
+        if(voicelist[key].name == (language + " Female")){
+          responseLanguage = language + ' Female';
+        } 
+        if(voicelist[key].name == (language + " Male")){
+          responseLanguage = language + ' Male';
+        }
+        });
+      responsiveVoice.speak(text, responseLanguage);
 
+    }
 
 
 </script>
