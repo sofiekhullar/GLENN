@@ -9,8 +9,11 @@
     <h3 id='glenn-heard'></h3>
     <h2 id='now-playing'></h2>
 
-    <input id="word">
+    <input id="word" value="I like the sound of the piano better, but I love the portability of a guitar">
     <button onClick="getWordClasses()">Get word classes</button>
+
+    <button onClick="textAnalysis()">Test shit!</button>
+
     <div id="def"></div>
       </body>
    <script>
@@ -98,6 +101,24 @@
         };
         xmlhttp.open("GET", "dictionary.php?q=" + document.getElementById("word").value, true);
         xmlhttp.send();
+    }
+
+    function textAnalysis(){
+      var APIKey = 'b64036dc989b2b7ce6ef2dfbdd258442';
+      var APPId = 'cfc263b9';
+
+      var xmlhttp = new XMLHttpRequest();
+      
+      xmlhttp.onreadystatechange = function() {
+
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("def").innerHTML = this.responseText;
+            }
+        };
+        xmlhttp.open("GET", "Labeling.php?q=" + document.getElementById("word").value, true);
+        xmlhttp.send();
+
+       // document.location.href = 'Labeling.php';
     }
 
 
