@@ -8,6 +8,10 @@
     <h1>Hi, my name is GLENN!</h1>
     <h3 id='glenn-heard'></h3>
     <h2 id='now-playing'></h2>
+
+    <input id="word">
+    <button onClick="getWordClasses()">Get word classes</button>
+    <div id="def"></div>
       </body>
    <script>
       const token = 'BQAOpC-T-tJxq7jT72SUMTd_I94vmC9_zd2i410mYTX8N32RtdPrEpjWGGQFQ_ljfZ5PQ7VhpoA8nep-YlVv2hXHG-ZE2oejmNUPdU6f0XNGA7ZOcUlwYy6VHD5x5m6fW5cJZ6_BPV4';
@@ -83,7 +87,23 @@
           annyang.start();
       }
 
+    function getWordClasses() {
+
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("def").innerHTML = this.responseText;
+            }
+        };
+        xmlhttp.open("GET", "dictionary.php?q=" + document.getElementById("word").value, true);
+        xmlhttp.send();
+    }
+
+
+
 </script>
+
 </html>
 
 
