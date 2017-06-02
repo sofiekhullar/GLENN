@@ -3,8 +3,7 @@ define('APPLICATION_ID',    'cfc263b9');
 define('APPLICATION_KEY',  'b64036dc989b2b7ce6ef2dfbdd258442');
 
 
-
-function call_api($endpoint, $parameters) {
+/*function call_api($endpoint, $parameters) {
   $ch = curl_init('https://api.aylien.com/api/v1/' . $endpoint);
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
   curl_setopt($ch, CURLOPT_HTTPHEADER, array(
@@ -16,18 +15,28 @@ function call_api($endpoint, $parameters) {
   curl_setopt($ch, CURLOPT_POSTFIELDS, $parameters);
   $response = curl_exec($ch);
   return json_decode($response);
+}*/
+ $classify_unsupervised = call_api_semantic_classifier();
+
+$tmp = 0;
+$label ="no label";
+
+foreach($classify_unsupervised->classes as $c) 
+{
+  //printf("%s: %f", $c->label, $c->score);
+  if($c->score > $tmp){
+    $tmp = $c->score;
+    $label = $c->label;
+  }
 }
+echo $label;
 
 function call_api_semantic_classifier() {
 
   $wordArray = explode(" ", $_REQUEST['q']);
-  var_dump( $wordArray);
   $newstring = implode("%20", $wordArray);
 
-  var_dump($newstring);
-  echo("<br/>");
-
-  $ch = curl_init('https://api.aylien.com/api/v1/classify/unsupervised?text='.$newstring.'&class[]=music&class[]=technology');
+  $ch = curl_init('https://api.aylien.com/api/v1/classify/unsupervised?text='.$newstring.'&class[]=music&class[]=weather&class[]=food');
 
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
   curl_setopt($ch, CURLOPT_HTTPHEADER, array(
@@ -41,7 +50,7 @@ function call_api_semantic_classifier() {
   return json_decode($response);
 }
 
-
+/*
 
 $endpoints = array("language", "classify/unsupervised");
 $url = "http://www.bbc.com/news/science-environment-27688511";
@@ -54,7 +63,7 @@ foreach($endpoints as $endpoint)
         $params = array('text' => 'What language is this sentence written in?');
         $language = call_api('language', $params);
 
-        echo sprintf("Language: %s (%F)", $language->lang, $language->confidence);
+        //echo sprintf("Language: %s (%F)", $language->lang, $language->confidence);
         break;
       }
       case "classify/unsupervised":
@@ -63,7 +72,10 @@ foreach($endpoints as $endpoint)
 
         foreach($classify_unsupervised->classes as $c) 
         {
-          printf("%s: %f", $c->label, $c->score);
+          //printf("%s: %f", $c->label, $c->score);
+          echo($c->label);
+          echo(" ");
+          echo($c->score);
         }
 
         /*$class = array('technology', 'sports');
@@ -73,10 +85,10 @@ foreach($endpoints as $endpoint)
         //foreach($classify_unsuper->classes as $c) {
         // echo sprintf("%s: %f\n", $c->label, $c->score);
         //}
-        */
+       
 
         break;
       }
-  }
-}
+  } 
+}*/
 ?>

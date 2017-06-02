@@ -58,29 +58,24 @@
           console.log("annyang ok");
 
           var commands = {
-            'play': function() {
-              console.log('play');
+            'yes *input': function(input) {
+              console.log("YEEES " + input);
+              processInput(input);
             },
-            'yes': function() {
-              console.log('yes');
+
+            'GLENNN *input': function(input) {
+              console.log("input " + input);
+              processInput(input);
             },
-            
-            'hello *test': function(test) {
-              console.log("input " + test);
-              if(test == 'test'){
-                console.log('hello test');
-              }else{ 
-                console.log('hello no test');
-              } 
-              
+
+            'GLENN *input': function(input) {
+              console.log("input " + input);
+              processInput(input);
             },
-            'play *song': function (song) {
-              console.log(song);
-              searchSong(song);
-            },
-            'play *song by *artist': function (song, artist) {
-                console.log('Play song ' + song + ' by ' + artist);
-                searchSongWithArtist(song, artist);
+
+            'GLEN *input': function(input) {
+              console.log("input " + input);
+              processInput(input);
             },
           };
 
@@ -90,6 +85,24 @@
           annyang.start();
       }
 
+      function processInput(input){
+          var label = textAnalysis(input);
+          console.log('processInput ' +label);
+
+          switch (label)
+          {
+            case "music":
+              console.log('in the music case');
+              break;
+            case "weather":
+              console.log('in the weather case');
+              break;
+            case "food": 
+              console.log('in the food case');
+             break;
+          }
+
+      }
     function getWordClasses() {
 
         var xmlhttp = new XMLHttpRequest();
@@ -103,22 +116,29 @@
         xmlhttp.send();
     }
 
-    function textAnalysis(){
+    function textAnalysis(input){
       var APIKey = 'b64036dc989b2b7ce6ef2dfbdd258442';
       var APPId = 'cfc263b9';
-
+      var responseLabel = "";
       var xmlhttp = new XMLHttpRequest();
       
       xmlhttp.onreadystatechange = function() {
-
             if (this.readyState == 4 && this.status == 200) {
                 document.getElementById("def").innerHTML = this.responseText;
+                console.log('onreadystatechange ' + this.responseText);
             }
         };
-        xmlhttp.open("GET", "Labeling.php?q=" + document.getElementById("word").value, true);
-        xmlhttp.send();
 
-       // document.location.href = 'Labeling.php';
+        xmlhttp.onload = function () {
+        console.log('DONE' +  xmlhttp.readyState + " " + this.responseText); // readyState will be 4
+        responseLabel =  this.responseText;
+        return responseLabel;
+    };
+
+        //xmlhttp.open("GET", "Labeling.php?q=" + document.getElementById("word").value, true);
+        xmlhttp.open("GET", "Labeling.php?q=" + input, true);
+        xmlhttp.send();
+        console.log('2' + responseLabel);       
     }
     
     function textToSpeech(text, language) {
@@ -133,7 +153,6 @@
         }
         });
       responsiveVoice.speak(text, responseLanguage);
-
     }
 
 
