@@ -12,19 +12,42 @@
     <input id="word" value="I like the sound of the piano better, but I love the portability of a guitar">
     <button onClick="getWordClasses()">Get word classes</button>
 
-    <button onClick="testShit()">Test shit!</button>
+    <button onClick="findRecipe('Chicken thyme')">Test shit!</button>
 
     <input id="weather">
     <button onClick="getWeather()">Get weather</button>
     <div id="weatherInfo"></div>
 
 
+   
     <div id="def"></div>
 
     <div id="dic"></div>
 
       </body>
    <script>
+   var findRecipe = function(query){
+    var responseLabel = "";
+      var xmlhttp = new XMLHttpRequest();
+      
+      xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log(this.responseText);
+            }
+        };
+
+        xmlhttp.open("GET", "recipe.php?q=" + query, true);
+        xmlhttp.send();
+   };
+
+      var searchSongWithArtist = function(songName, artistName) {
+        var query = songName;
+        if (artistName) {
+            query += ' artist:' + artistName;
+            console.log(query);
+        }
+        searchSong(query);
+      }
     
         if (annyang) {
           var commands = {
