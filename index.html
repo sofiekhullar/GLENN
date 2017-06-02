@@ -14,6 +14,11 @@
 
     <button onClick="testShit()">Test shit!</button>
 
+    <input id="weather">
+    <button onClick="getWeather()">Get weather</button>
+    <div id="weatherInfo"></div>
+
+
     <div id="def"></div>
       </body>
    <script>
@@ -136,6 +141,18 @@
         xmlhttp.send();
     }
     
+    function getWeather() {
+
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("weatherInfo").innerHTML = this.responseText;
+            }
+        };
+        xmlhttp.open("GET", "weather.php?q=" + document.getElementById("weather").value, true);
+        xmlhttp.send();
+    }
 
     function textToSpeech(text, language) {
       var voicelist = responsiveVoice.getVoices();
