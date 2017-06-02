@@ -17,42 +17,61 @@
     <button onClick="testShit()">Test shit!</button><br>
     <button onClick="writeAnswer('something something something something hahahaha')">Temporary answer</button><br>
 
-
-    <div id="dic"></div>
-
       </body>
    <script>
 
     var lastWriter = "you";
-    
-        if (annyang) {
-          var commands = {
-            'yes *input': function(input) {
-              console.log("input " + input);
-              textAnalysis(input);
-            },
+    var audio = new Audio();
 
-            'GLENNN *input': function(input) {
-              console.log("input " + input);
-              textAnalysis(input);
-            },
+    var findRecipe = function(query)
+    {
+      var responseLabel = "";
+      var xmlhttp = new XMLHttpRequest();
+        
+      xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log(this.responseText);
+            }
+      };
 
-            'GLENN *input': function(input) {
-              console.log("input " + input);
-              textAnalysis(input);
-            },
+      xmlhttp.open("GET", "recipe.php?q=" + query, true);
+      xmlhttp.send();
+    };
 
-            'GLEN *input': function(input) {
-              console.log("input " + input);
-              textAnalysis(input);
-            },
-          };
 
-          // Add our commands to annyang
-          annyang.addCommands(commands);
-          // Start listening. You can call this here, or attach this call to an event, button, etc.
-          annyang.start();
-      }
+    if (annyang) {
+      var commands = {
+       'yes *input': function(input) {
+          console.log("input: " + input);
+          textAnalysis(input);
+        },     
+
+        'Yes *input': function(input) {
+          console.log("input: " + input);
+          textAnalysis(input);
+        },
+
+        'GLENNN *input': function(input) {
+          console.log("input " + input);
+          textAnalysis(input);
+        },
+
+        'GLENN *input': function(input) {
+          console.log("input " + input);
+          textAnalysis(input);
+        },
+
+        'GLEN *input': function(input) {
+          console.log("input " + input);
+          textAnalysis(input);
+        },
+      };
+
+      // Add our commands to annyang
+      annyang.addCommands(commands);
+      // Start listening. You can call this here, or attach this call to an event, button, etc.
+      annyang.start();
+  }
 
 
       function processInput(label, input){
@@ -60,6 +79,7 @@
           {
             case "music":
               console.log('in the music case with q: ' + input);
+              processMusic(input);
               break;
             case "weather":
               console.log('in the weather case q: ' + input);
@@ -85,8 +105,8 @@
     }
 
     function testShit(){
-      textAnalysis('Play the next song please');
-      //textAnalysis('Is it sunny in sweden?');
+      textAnalysis('stop the music');
+      //textAnalysis('Is it sunny in Stockholm?');
       //textAnalysis('I to eat cake and hamburgers');
     }
 
@@ -154,27 +174,71 @@
     }
     /*******************************************/
 
+
     /***** Music functions *********/
+    function processMusic(input){
+      input = input.toLowerCase();
+      console.log('play ' + input.indexOf('play') + ' by ' + input.indexOf('by') + ' stop ' + input.indexOf('stop'));
+      if(input.indexOf('play') >= 0 && (input.indexOf('by') >= 0 || input.indexOf('with') >= 0)){
+        console.log('1' + input);
+        var sliceString;
+        var play = 'play';
+
+        if(input.indexOf('by') >= 0)
+        {  
+          sliceString = 'by';
+        }
+        else 
+        {
+          sliceString = 'with';
+        }
+       
+        var artist = input.slice(input.indexOf(sliceString) + play.length);
+        var song = input.slice(input.indexOf('play') + 5 , input.indexOf(sliceString)); 
+        searchSongWithArtist(song, artist);
+      }
+
+      if(input.indexOf('play') >= 0 && input.indexOf('stop') != 0 && (input.indexOf('by') != 0 || input.indexOf('with') != 0))
+      {
+        console.log('2' + input + " index " + input.indexOf('stop'));
+        var play = 'play';
+        var song = input.slice(input.indexOf(play) + play.length);
+        searchSong(song);
+  
+      }
+      if(input.indexOf('stop') >= 0){
+        stopMusic();
+      }
+    }
+
+    function stopMusic(){
+      audio.pause();
+    }
       var searchSong = function(query){
-       const token = 'BQAOpC-T-tJxq7jT72SUMTd_I94vmC9_zd2i410mYTX8N32RtdPrEpjWGGQFQ_ljfZ5PQ7VhpoA8nep-YlVv2hXHG-ZE2oejmNUPdU6f0XNGA7ZOcUlwYy6VHD5x5m6fW5cJZ6_BPV4';
+        console.log('searchSong');
+        const token = 'BQBp-GE334P-iaq8Yx5GpOL1anwbjC343MTFK7RKWEnt-6TJg8zH4y-p1je2pZmAM24Ubaf_W8txgd67Hey94npfzDruh0INp6TYfxFjql8gIbzTDgsQF8ht8XtjyPUUWwdRffhl_g6Tepbb9keUGcMzeiY';
+
+       var clientID = '7a77808a1cba4ee5b183559a4badb9be';
+       var clientSecret = 'de4baf6a743f42d28a5dc17fd38104f4';
        
      $.ajax({
       url: 'https://api.spotify.com/v1/search',
       data: {
           q: query,
-          type: 'track'
+          type: 'track,artist'
       },
-       headers: {
+      headers: {
         'Authorization' : 'Bearer ' + token,
-    },
+      },
       success: function (response) {
           if (response.tracks.items.length) {
               console.log(response.tracks.items[0].name);
               writeAnswer("GLENN heard " + query);
               writeAnswer("Playing " + response.tracks.items[0].name);
               var track = response.tracks.items[0];
-              var preview_song = new Audio(track.preview_url);
-              preview_song.play();
+              audio.src = track.preview_url;
+             // var preview_song = new Audio(track.preview_url);
+              audio.play();
           }
        },
       error: function(){
@@ -184,11 +248,12 @@
    };
 
       var searchSongWithArtist = function(songName, artistName) {
-        var query = songName;
-        if (artistName) {
-            query += ' artist:' + artistName;
-            console.log(query);
-        }
+        songName = songName.trim();
+        artistName = artistName.replace(/\s/g,'+');
+        songName = songName.replace(/\s/g,'+');
+
+        var query = songName + artistName;
+        
         searchSong(query);
       }
       /*******************************************/
@@ -208,9 +273,7 @@
         var answerDiv = document.createElement('div');
         answerDiv.id = 'answer';
         answerDiv.innerHTML = input;
-        // document.getElementById('conversation').innerHTML = "hej";
         document.getElementById('conversation').appendChild(answerDiv);
-        
       }
 
 </script>
