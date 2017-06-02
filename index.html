@@ -15,11 +15,111 @@
     <button onClick="testShit()">Test shit!</button>
 
     <div id="def"></div>
+
+    <div id="dic"></div>
+
       </body>
    <script>
-      const token = 'BQAOpC-T-tJxq7jT72SUMTd_I94vmC9_zd2i410mYTX8N32RtdPrEpjWGGQFQ_ljfZ5PQ7VhpoA8nep-YlVv2hXHG-ZE2oejmNUPdU6f0XNGA7ZOcUlwYy6VHD5x5m6fW5cJZ6_BPV4';
+    
+        if (annyang) {
+          var commands = {
+            'yes *input': function(input) {
+              console.log("input " + input);
+              textAnalysis(input);
+            },
 
-    var searchSong = function(query){
+            'GLENNN *input': function(input) {
+              console.log("input " + input);
+              textAnalysis(input);
+            },
+
+            'GLENN *input': function(input) {
+              console.log("input " + input);
+              textAnalysis(input);
+            },
+
+            'GLEN *input': function(input) {
+              console.log("input " + input);
+              textAnalysis(input);
+            },
+          };
+
+          // Add our commands to annyang
+          annyang.addCommands(commands);
+          // Start listening. You can call this here, or attach this call to an event, button, etc.
+          annyang.start();
+      }
+
+
+      function processInput(label, input){
+          switch (label)
+          {
+            case "music"
+              console.log('in the music case with q: ' + input);
+              
+              break;
+            case "weather":
+              console.log('in the weather case q: ' + input));
+              break;
+            case "food": 
+              console.log('in the food caseq: ' + input));
+             break;
+          }
+      }
+
+    function getWordClasses(input){
+  
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("dic").innerHTML = this.responseText;
+            }
+        };
+        xmlhttp.open("GET", "dictionary.php?q=" + input, true);
+        xmlhttp.send();
+    }
+
+    function testShit(){
+      textAnalysis('Play the next song please');
+      //textAnalysis('Is it sunny in sweden?');
+      //textAnalysis('I to eat cake and hamburgers');
+    }
+
+    function textAnalysis(input){
+
+      var responseLabel = "";
+      var xmlhttp = new XMLHttpRequest();
+      
+      xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) 
+            {
+              document.getElementById("def").innerHTML = this.responseText;
+              processInput(this.responseText, input);
+            }
+        };
+        xmlhttp.open("GET", "Labeling.php?q=" + input, true);
+        xmlhttp.send();
+    }
+    
+    /***** Music functions *********/
+    function textToSpeech(text, language) {
+      var voicelist = responsiveVoice.getVoices();
+      var responseLanguage = 'US English Male';
+      Object.keys(voicelist).forEach(function(key) {
+        if(voicelist[key].name == (language + " Female")){
+          responseLanguage = language + ' Female';
+        } 
+        if(voicelist[key].name == (language + " Male")){
+          responseLanguage = language + ' Male';
+        }
+        });
+      responsiveVoice.speak(text, responseLanguage);
+    }
+
+      var searchSong = function(query){
+       const token = 'BQAOpC-T-tJxq7jT72SUMTd_I94vmC9_zd2i410mYTX8N32RtdPrEpjWGGQFQ_ljfZ5PQ7VhpoA8nep-YlVv2hXHG-ZE2oejmNUPdU6f0XNGA7ZOcUlwYy6VHD5x5m6fW5cJZ6_BPV4';
+       
      $.ajax({
       url: 'https://api.spotify.com/v1/search',
       data: {
@@ -53,104 +153,7 @@
         }
         searchSong(query);
       }
-
-        if (annyang) {
-          console.log("annyang ok");
-
-          var commands = {
-            'yes *input': function(input) {
-              console.log("YEEES " + input);
-              textAnalysis(input);
-            },
-
-            'GLENNN *input': function(input) {
-              console.log("input " + input);
-              textAnalysis(input);
-            },
-
-            'GLENN *input': function(input) {
-              console.log("input " + input);
-              textAnalysis(input);
-            },
-
-            'GLEN *input': function(input) {
-              console.log("input " + input);
-              textAnalysis(input);
-            },
-          };
-
-          // Add our commands to annyang
-          annyang.addCommands(commands);
-          // Start listening. You can call this here, or attach this call to an event, button, etc.
-          annyang.start();
-      }
-
-      function processInput(label){
-          console.log('processInput ' +label);
-
-          switch (label)
-          {
-            case "music":
-              console.log('in the music case');
-              break;
-            case "weather":
-              console.log('in the weather case');
-              break;
-            case "food": 
-              console.log('in the food case');
-             break;
-          }
-
-      }
-
-    function getWordClasses() {
-
-        var xmlhttp = new XMLHttpRequest();
-        xmlhttp.onreadystatechange = function() {
-
-            if (this.readyState == 4 && this.status == 200) {
-                document.getElementById("def").innerHTML = this.responseText;
-            }
-        };
-        xmlhttp.open("GET", "dictionary.php?q=" + document.getElementById("word").value, true);
-        xmlhttp.send();
-    }
-
-    function testShit(){
-      //textAnalysis('I like the sound of the piano better, but I love the portability of a guitar');
-      textAnalysis('I the sun and not rain');
-    }
-
-    function textAnalysis(input){
-
-      var responseLabel = "";
-      var xmlhttp = new XMLHttpRequest();
-      
-      xmlhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                 processInput(this.responseText);
-            }
-        };
-
-        xmlhttp.open("GET", "Labeling.php?q=" + input, true);
-        xmlhttp.send();
-    }
-    
-
-    function textToSpeech(text, language) {
-      var voicelist = responsiveVoice.getVoices();
-      var responseLanguage = 'US English Male';
-      Object.keys(voicelist).forEach(function(key) {
-        if(voicelist[key].name == (language + " Female")){
-          responseLanguage = language + ' Female';
-        } 
-        if(voicelist[key].name == (language + " Male")){
-          responseLanguage = language + ' Male';
-        }
-        });
-      responsiveVoice.speak(text, responseLanguage);
-    }
-
+      /*******************************************/
 
 </script>
 

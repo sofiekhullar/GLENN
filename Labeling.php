@@ -2,21 +2,7 @@
 define('APPLICATION_ID',    'cfc263b9');
 define('APPLICATION_KEY',  'b64036dc989b2b7ce6ef2dfbdd258442');
 
-
-/*function call_api($endpoint, $parameters) {
-  $ch = curl_init('https://api.aylien.com/api/v1/' . $endpoint);
-  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-  curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-    'Accept: application/json',
-    'X-AYLIEN-TextAPI-Application-Key: ' . APPLICATION_KEY,
-    'X-AYLIEN-TextAPI-Application-ID: '. APPLICATION_ID
-  ));
-  curl_setopt($ch, CURLOPT_POST, true);
-  curl_setopt($ch, CURLOPT_POSTFIELDS, $parameters);
-  $response = curl_exec($ch);
-  return json_decode($response);
-}*/
- $classify_unsupervised = call_api_semantic_classifier();
+$classify_unsupervised = call_api_semantic_classifier();
 
 $tmp = 0;
 $label ="no label";
@@ -49,6 +35,20 @@ function call_api_semantic_classifier() {
   $response = curl_exec($ch);
   return json_decode($response);
 }
+
+/*function call_api($endpoint, $parameters) {
+  $ch = curl_init('https://api.aylien.com/api/v1/' . $endpoint);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+  curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+    'Accept: application/json',
+    'X-AYLIEN-TextAPI-Application-Key: ' . APPLICATION_KEY,
+    'X-AYLIEN-TextAPI-Application-ID: '. APPLICATION_ID
+  ));
+  curl_setopt($ch, CURLOPT_POST, true);
+  curl_setopt($ch, CURLOPT_POSTFIELDS, $parameters);
+  $response = curl_exec($ch);
+  return json_decode($response);
+}*/
 
 /*
 
