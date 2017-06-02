@@ -12,7 +12,7 @@
     <input id="word" value="I like the sound of the piano better, but I love the portability of a guitar">
     <button onClick="getWordClasses()">Get word classes</button>
 
-    <button onClick="testShit()">Test shit!</button>
+    <button onClick="findRecipe('Chicken thyme')">Test shit!</button>
 
     <div id="def"></div>
       </body>
@@ -43,6 +43,20 @@
           $('#glenn-heard').html("Sorry I don't understand");
       }
     })
+   };
+
+   var findRecipe = function(query){
+    var responseLabel = "";
+      var xmlhttp = new XMLHttpRequest();
+      
+      xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log(this.responseText);
+            }
+        };
+
+        xmlhttp.open("GET", "recipe.php?q=" + query, true);
+        xmlhttp.send();
    };
 
       var searchSongWithArtist = function(songName, artistName) {
