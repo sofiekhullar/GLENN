@@ -33,7 +33,6 @@
                 console.log(this.responseText);
             }
       };
-
       xmlhttp.open("GET", "recipe.php?q=" + query, true);
       xmlhttp.send();
     };
@@ -45,12 +44,10 @@
           console.log("input: " + input);
           textAnalysis(input);
         },     
-
         'Yes *input': function(input) {
           console.log("input: " + input);
           textAnalysis(input);
         },
-
         'GLENNN *input': function(input) {
           console.log("input " + input);
           textAnalysis(input);
@@ -60,7 +57,6 @@
           console.log("input " + input);
           textAnalysis(input);
         },
-
         'GLEN *input': function(input) {
           console.log("input " + input);
           textAnalysis(input);
@@ -104,12 +100,6 @@
         xmlhttp.send();
     }
 
-    function testShit(){
-      textAnalysis('stop the music');
-      //textAnalysis('Is it sunny in Stockholm?');
-      //textAnalysis('I to eat cake and hamburgers');
-    }
-
     function textAnalysis(input){
 
       if(lastWriter == "glenn")
@@ -126,9 +116,6 @@
       questionDiv.innerHTML = input + "?";
       document.getElementById('conversation').appendChild(questionDiv);
 
-
-
-      var responseLabel = "";
       var xmlhttp = new XMLHttpRequest()
       
       xmlhttp.onreadystatechange = function() {
@@ -171,6 +158,7 @@
       };
       xmlhttp.open("GET", "weather.php?q=" + city, true);
       xmlhttp.send();
+
     }
     /*******************************************/
 
@@ -179,6 +167,7 @@
     function processMusic(input){
       input = input.toLowerCase();
       console.log('play ' + input.indexOf('play') + ' by ' + input.indexOf('by') + ' stop ' + input.indexOf('stop'));
+
       if(input.indexOf('play') >= 0 && (input.indexOf('by') >= 0 || input.indexOf('with') >= 0)){
         console.log('1' + input);
         var sliceString;
@@ -198,7 +187,7 @@
         searchSongWithArtist(song, artist);
       }
 
-      if(input.indexOf('play') >= 0 && input.indexOf('stop') != 0 && (input.indexOf('by') != 0 || input.indexOf('with') != 0))
+      if(input.indexOf('play') >= 0 && input.indexOf('stop') == -1 && input.indexOf('by') == -1 && input.indexOf('with') == -1)
       {
         console.log('2' + input + " index " + input.indexOf('stop'));
         var play = 'play';
@@ -216,7 +205,7 @@
     }
       var searchSong = function(query){
         console.log('searchSong');
-        const token = 'BQBp-GE334P-iaq8Yx5GpOL1anwbjC343MTFK7RKWEnt-6TJg8zH4y-p1je2pZmAM24Ubaf_W8txgd67Hey94npfzDruh0INp6TYfxFjql8gIbzTDgsQF8ht8XtjyPUUWwdRffhl_g6Tepbb9keUGcMzeiY';
+        const token = 'BQCkqsePlcmnErqXFbH-2DrSSQNMMRgmHe5WgLgwXOADoSg1YGf5U3kYNAo5PFNHCd_5j38cg9PXVfU_mvU_jBKC3tRqprDhzQLJxhZlsgvxFDuq3NC6-mnuN9NldWxbF6cDNHi2oKqEeOhYx0aMtkZZ-M8';
 
        var clientID = '7a77808a1cba4ee5b183559a4badb9be';
        var clientSecret = 'de4baf6a743f42d28a5dc17fd38104f4';
@@ -237,11 +226,11 @@
               writeAnswer("Playing " + response.tracks.items[0].name);
               var track = response.tracks.items[0];
               audio.src = track.preview_url;
-             // var preview_song = new Audio(track.preview_url);
               audio.play();
           }
        },
-      error: function(){
+      error: function(response){
+          console(response);
           writeAnswer("Sorry I don't understand");
       }
     })
@@ -258,7 +247,7 @@
       }
       /*******************************************/
 
-      //temporary answer thingy
+      //answer thingy
       function writeAnswer(input){
 
         if(lastWriter == "you")
