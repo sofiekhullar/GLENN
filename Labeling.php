@@ -1,6 +1,6 @@
 <?php
-define('APPLICATION_ID',    'cfc263b9');
-define('APPLICATION_KEY',  'b64036dc989b2b7ce6ef2dfbdd258442');
+define('APPLICATION_ID',    '78232f4a');
+define('APPLICATION_KEY',  '384edd3cbd4539be88186218a67e7582');
 
 $classify_unsupervised = call_api_semantic_classifier();
 
@@ -33,6 +33,7 @@ function call_api_semantic_classifier() {
   curl_setopt($ch, CURLOPT_POST, true);
   curl_setopt($ch, CURLOPT_POSTFIELDS, $parameters);
   $response = curl_exec($ch);
+
   return json_decode($response);
 }
 

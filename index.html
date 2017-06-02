@@ -14,6 +14,11 @@
 
     <button onClick="testShit()">Test shit!</button>
 
+    <input id="weather">
+    <button onClick="getWeather()">Get weather</button>
+    <div id="weatherInfo"></div>
+
+
     <div id="def"></div>
 
     <div id="dic"></div>
@@ -54,15 +59,14 @@
       function processInput(label, input){
           switch (label)
           {
-            case "music"
+            case "music":
               console.log('in the music case with q: ' + input);
-              
               break;
             case "weather":
-              console.log('in the weather case q: ' + input));
+              console.log('in the weather case q: ' + input);
               break;
             case "food": 
-              console.log('in the food caseq: ' + input));
+              console.log('in the food caseq: ' + input);
              break;
           }
       }
@@ -102,7 +106,6 @@
         xmlhttp.send();
     }
     
-    /***** Music functions *********/
     function textToSpeech(text, language) {
       var voicelist = responsiveVoice.getVoices();
       var responseLanguage = 'US English Male';
@@ -116,7 +119,24 @@
         });
       responsiveVoice.speak(text, responseLanguage);
     }
+    
 
+    /***** Weather functions *****************/
+    function getWeather() {
+
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("weatherInfo").innerHTML = this.responseText;
+            }
+        };
+        xmlhttp.open("GET", "weather.php?q=" + document.getElementById("weather").value, true);
+        xmlhttp.send();
+    }
+    /*******************************************/
+
+    /***** Music functions *********/
       var searchSong = function(query){
        const token = 'BQAOpC-T-tJxq7jT72SUMTd_I94vmC9_zd2i410mYTX8N32RtdPrEpjWGGQFQ_ljfZ5PQ7VhpoA8nep-YlVv2hXHG-ZE2oejmNUPdU6f0XNGA7ZOcUlwYy6VHD5x5m6fW5cJZ6_BPV4';
        
