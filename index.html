@@ -64,6 +64,7 @@
               break;
             case "weather":
               console.log('in the weather case q: ' + input);
+              getWeather(input);
               break;
             case "food": 
               console.log('in the food caseq: ' + input);
@@ -122,17 +123,20 @@
     
 
     /***** Weather functions *****************/
-    function getWeather() {
+    function getWeather(input) {
 
-        var xmlhttp = new XMLHttpRequest();
-        xmlhttp.onreadystatechange = function() {
+      input = input.split(" ");
+      var city = input[input.indexOf("in") + 1];          
 
-            if (this.readyState == 4 && this.status == 200) {
-                document.getElementById("weatherInfo").innerHTML = this.responseText;
-            }
-        };
-        xmlhttp.open("GET", "weather.php?q=" + document.getElementById("weather").value, true);
-        xmlhttp.send();
+      var xmlhttp = new XMLHttpRequest();
+      xmlhttp.onreadystatechange = function() {
+
+        if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("weatherInfo").innerHTML = this.responseText;
+        }
+      };
+      xmlhttp.open("GET", "weather.php?q=" + city, true);
+      xmlhttp.send();
     }
     /*******************************************/
 
