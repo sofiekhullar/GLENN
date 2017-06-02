@@ -12,7 +12,7 @@
     <input id="word" value="I like the sound of the piano better, but I love the portability of a guitar">
     <button onClick="getWordClasses()">Get word classes</button>
 
-    <button onClick="textAnalysis()">Test shit!</button>
+    <button onClick="testShit()">Test shit!</button>
 
     <div id="def"></div>
       </body>
@@ -60,22 +60,22 @@
           var commands = {
             'yes *input': function(input) {
               console.log("YEEES " + input);
-              processInput(input);
+              textAnalysis(input);
             },
 
             'GLENNN *input': function(input) {
               console.log("input " + input);
-              processInput(input);
+              textAnalysis(input);
             },
 
             'GLENN *input': function(input) {
               console.log("input " + input);
-              processInput(input);
+              textAnalysis(input);
             },
 
             'GLEN *input': function(input) {
               console.log("input " + input);
-              processInput(input);
+              textAnalysis(input);
             },
           };
 
@@ -85,8 +85,7 @@
           annyang.start();
       }
 
-      function processInput(input){
-          var label = textAnalysis(input);
+      function processInput(label){
           console.log('processInput ' +label);
 
           switch (label)
@@ -103,6 +102,7 @@
           }
 
       }
+
     function getWordClasses() {
 
         var xmlhttp = new XMLHttpRequest();
@@ -116,31 +116,27 @@
         xmlhttp.send();
     }
 
+    function testShit(){
+      //textAnalysis('I like the sound of the piano better, but I love the portability of a guitar');
+      textAnalysis('I the sun and not rain');
+    }
+
     function textAnalysis(input){
-      var APIKey = 'b64036dc989b2b7ce6ef2dfbdd258442';
-      var APPId = 'cfc263b9';
+
       var responseLabel = "";
       var xmlhttp = new XMLHttpRequest();
       
       xmlhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
-                document.getElementById("def").innerHTML = this.responseText;
-                console.log('onreadystatechange ' + this.responseText);
+                 processInput(this.responseText);
             }
         };
 
-        xmlhttp.onload = function () {
-        console.log('DONE' +  xmlhttp.readyState + " " + this.responseText); // readyState will be 4
-        responseLabel =  this.responseText;
-        return responseLabel;
-    };
-
-        //xmlhttp.open("GET", "Labeling.php?q=" + document.getElementById("word").value, true);
         xmlhttp.open("GET", "Labeling.php?q=" + input, true);
         xmlhttp.send();
-        console.log('2' + responseLabel);       
     }
     
+
     function textToSpeech(text, language) {
       var voicelist = responsiveVoice.getVoices();
       var responseLanguage = 'US English Male';
