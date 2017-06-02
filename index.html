@@ -3,28 +3,27 @@
   <head>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/annyang/1.1.0/annyang.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
   </head>
   <body>
-    <h1>Hi, my name is GLENN!</h1>
-    <h3 id='glenn-heard'></h3>
-    <h2 id='now-playing'></h2>
+    <br><br><br>
+    <h1 id="header">
+      <svg height="20" width="20">
+        <circle cx="12" cy="10" r="5" stroke="black" stroke-width="3" fill="green" />
+      </svg> GLENN</h1>
+    <div id="conversation"></div>
+    <br><br><br><br><br><br><br><br>
+    <input id="word" value="I like the sound of the piano better, but I love the portability of a guitar"><br>
+    <button onClick="testShit()">Test shit!</button><br>
+    <button onClick="writeAnswer('something something something something hahahaha')">Temporary answer</button><br>
 
-    <input id="word" value="I like the sound of the piano better, but I love the portability of a guitar">
-    <button onClick="getWordClasses()">Get word classes</button>
-
-    <button onClick="testShit()">Test shit!</button>
-
-    <input id="weather">
-    <button onClick="getWeather()">Get weather</button>
-    <div id="weatherInfo"></div>
-
-
-    <div id="def"></div>
 
     <div id="dic"></div>
 
       </body>
    <script>
+
+    var lastWriter = "you";
     
         if (annyang) {
           var commands = {
@@ -93,13 +92,28 @@
 
     function textAnalysis(input){
 
+      if(lastWriter == "glenn")
+        {
+          var nameDive= document.createElement('div');
+          nameDive.id = 'answerName';
+          nameDive.innerHTML = "Glenn";
+          document.getElementById('conversation').appendChild(nameDive);
+          lastWriter = "you";
+        }
+
+      var questionDiv = document.createElement('div');
+      questionDiv.id = 'question';
+      questionDiv.innerHTML = input + "?";
+      document.getElementById('conversation').appendChild(questionDiv);
+
+
+
       var responseLabel = "";
-      var xmlhttp = new XMLHttpRequest();
+      var xmlhttp = new XMLHttpRequest()
       
       xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) 
             {
-              document.getElementById("def").innerHTML = this.responseText;
               processInput(this.responseText, input);
             }
         };
@@ -132,7 +146,7 @@
       xmlhttp.onreadystatechange = function() {
 
         if (this.readyState == 4 && this.status == 200) {
-            document.getElementById("weatherInfo").innerHTML = this.responseText;
+            writeAnswer(this.responseText);;
         }
       };
       xmlhttp.open("GET", "weather.php?q=" + city, true);
@@ -156,15 +170,15 @@
       success: function (response) {
           if (response.tracks.items.length) {
               console.log(response.tracks.items[0].name);
-              $('#glenn-heard').html("GLENN heard " + query);
-              $('#now-playing').html("Playing " + response.tracks.items[0].name);
+              writeAnswer("GLENN heard " + query);
+              writeAnswer("Playing " + response.tracks.items[0].name);
               var track = response.tracks.items[0];
               var preview_song = new Audio(track.preview_url);
               preview_song.play();
           }
        },
       error: function(){
-          $('#glenn-heard').html("Sorry I don't understand");
+          writeAnswer("Sorry I don't understand");
       }
     })
    };
@@ -178,6 +192,26 @@
         searchSong(query);
       }
       /*******************************************/
+
+      //temporary answer thingy
+      function writeAnswer(input){
+
+        if(lastWriter == "you")
+        {
+          var nameDiv = document.createElement('div');
+          nameDiv.id = 'questionName';
+          nameDiv.innerHTML = "You";
+          document.getElementById('conversation').appendChild(nameDiv);
+          lastWriter = "glenn";
+        }
+
+        var answerDiv = document.createElement('div');
+        answerDiv.id = 'answer';
+        answerDiv.innerHTML = input;
+        // document.getElementById('conversation').innerHTML = "hej";
+        document.getElementById('conversation').appendChild(answerDiv);
+        
+      }
 
 </script>
 
