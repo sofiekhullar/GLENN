@@ -61,6 +61,7 @@
           {
             case "music":
               console.log('in the music case with q: ' + input);
+              processMusic(input);
               break;
             case "weather":
               console.log('in the weather case q: ' + input);
@@ -86,8 +87,8 @@
     }
 
     function testShit(){
-      textAnalysis('Play the next song please');
-      //textAnalysis('Is it sunny in sweden?');
+      textAnalysis('play some nights');
+      //textAnalysis('Is it sunny in Stockholm?');
       //textAnalysis('I to eat cake and hamburgers');
     }
 
@@ -141,18 +142,48 @@
     /*******************************************/
 
     /***** Music functions *********/
+
+    function processMusic(input){
+      if(input.indexOf('play') >= 0 && input.indexOf('by') >= 0 || input.indexOf('with') >= 0){
+
+        var sliceString;
+
+        if(input.indexOf('by') >= 0)
+        {  
+          sliceString = 'by';
+        }
+        else 
+        {
+          sliceString = 'with';
+        }
+       
+        var artist = input.slice(input.indexOf(sliceString) + play.length);
+        var song = input.slice(input.indexOf('play') + 5 , input.indexOf(sliceString)); 
+        searchSongWithArtist(song, artist);
+      }
+      if(input.indexOf('play') >= 0 && input.indexOf('by') <= 0 || input.indexOf('with') <= 0)
+      {
+        var play = 'play';
+        var song = input.slice(input.indexOf(play) + play.length);
+        searchSong(song);
+  
+      }
+    }
       var searchSong = function(query){
-       const token = 'BQAOpC-T-tJxq7jT72SUMTd_I94vmC9_zd2i410mYTX8N32RtdPrEpjWGGQFQ_ljfZ5PQ7VhpoA8nep-YlVv2hXHG-ZE2oejmNUPdU6f0XNGA7ZOcUlwYy6VHD5x5m6fW5cJZ6_BPV4';
+        const token = 'BQBp-GE334P-iaq8Yx5GpOL1anwbjC343MTFK7RKWEnt-6TJg8zH4y-p1je2pZmAM24Ubaf_W8txgd67Hey94npfzDruh0INp6TYfxFjql8gIbzTDgsQF8ht8XtjyPUUWwdRffhl_g6Tepbb9keUGcMzeiY';
+
+       var clientID = '7a77808a1cba4ee5b183559a4badb9be';
+       var clientSecret = 'de4baf6a743f42d28a5dc17fd38104f4';
        
      $.ajax({
       url: 'https://api.spotify.com/v1/search',
       data: {
           q: query,
-          type: 'track'
+          type: 'track,artist'
       },
-       headers: {
+      headers: {
         'Authorization' : 'Bearer ' + token,
-    },
+      },
       success: function (response) {
           if (response.tracks.items.length) {
               console.log(response.tracks.items[0].name);
@@ -163,18 +194,20 @@
               preview_song.play();
           }
        },
-      error: function(){
+      error: function(response){
+        console.log(response);
           $('#glenn-heard').html("Sorry I don't understand");
       }
     })
    };
 
       var searchSongWithArtist = function(songName, artistName) {
-        var query = songName;
-        if (artistName) {
-            query += ' artist:' + artistName;
-            console.log(query);
-        }
+        songName = songName.trim();
+        artistName = artistName.replace(/\s/g,'+');
+        songName = songName.replace(/\s/g,'+');
+
+        var query = songName + artistName;
+        
         searchSong(query);
       }
       /*******************************************/
