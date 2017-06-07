@@ -12,56 +12,29 @@
         <circle cx="12" cy="10" r="5" stroke="black" stroke-width="3" fill="green" />
       </svg> GLENN</h1>
     <div id="conversation"></div>
-    <br><br><br><br><br><br><br><br>
-    <input id="word" value="I like the sound of the piano better, but I love the portability of a guitar"><br>
-    <button onClick="testShit()">Test shit!</button><br>
-    <button onClick="writeAnswer('something something something something hahahaha')">Temporary answer</button><br>
-
       </body>
    <script>
 
     var lastWriter = "you";
     var audio = new Audio();
 
-    var testShit = function() {
-      textAnalysis("recipe with chicken and thyme");
-    }
-
-    var findRecipe = function(query)
-    {
-      var responseLabel = "";
-      var xmlhttp = new XMLHttpRequest();
-        
-      xmlhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                writeAnswer(this.responseText);
-            }
-      };
-      xmlhttp.open("GET", "recipe.php?q=" + query, true);
-      xmlhttp.send();
-    };
-
-
     if (annyang) {
       var commands = {
-       'yes *input': function(input) {
+       'love *input': function(input) {
           console.log("input: " + input);
           textAnalysis(input);
         },     
-        'Yes *input': function(input) {
+        'lovee *input': function(input) {
           console.log("input: " + input);
           textAnalysis(input);
         },
-        'GLENNN *input': function(input) {
+
+        'Lovee *input': function(input) {
           console.log("input " + input);
           textAnalysis(input);
         },
 
-        'GLENN *input': function(input) {
-          console.log("input " + input);
-          textAnalysis(input);
-        },
-        'GLEN *input': function(input) {
+        'Love *input': function(input) {
           console.log("input " + input);
           textAnalysis(input);
         },
@@ -158,7 +131,8 @@
       xmlhttp.onreadystatechange = function() {
 
         if (this.readyState == 4 && this.status == 200) {
-            writeAnswer(this.responseText);;
+            writeAnswer(this.responseText);
+            annyang.start();
         }
       };
       xmlhttp.open("GET", "weather.php?q=" + city, true);
@@ -207,10 +181,12 @@
 
     function stopMusic(){
       audio.pause();
+      writeAnswer('GLENN stopped the music!');
     }
       var searchSong = function(query){
         console.log('searchSong');
-        const token = 'BQCkqsePlcmnErqXFbH-2DrSSQNMMRgmHe5WgLgwXOADoSg1YGf5U3kYNAo5PFNHCd_5j38cg9PXVfU_mvU_jBKC3tRqprDhzQLJxhZlsgvxFDuq3NC6-mnuN9NldWxbF6cDNHi2oKqEeOhYx0aMtkZZ-M8';
+        //https://developer.spotify.com/web-api/console/get-track/#_=_ <--- get api key fron link
+        const token = 'BQAfFubE4Eb1tlkh5ODMhUo1-1hTm0GM7CLsqsPGSs6cpITVXzQ5h01cNRGZbCrqjSFoYRmBqCkdoMt89GrcZdw3M7HNRgbvJXhvMJlVjwynywwX-qWZrh8NuQnA0g27WjfWDdqVEE69gJuMLzRFj4Oi2fs';
 
        var clientID = '7a77808a1cba4ee5b183559a4badb9be';
        var clientSecret = 'de4baf6a743f42d28a5dc17fd38104f4';
@@ -227,11 +203,11 @@
       success: function (response) {
           if (response.tracks.items.length) {
               console.log(response.tracks.items[0].name);
-              writeAnswer("GLENN heard " + query);
               writeAnswer("Playing " + response.tracks.items[0].name);
               var track = response.tracks.items[0];
               audio.src = track.preview_url;
               audio.play();
+              annyang.start();
           }
        },
       error: function(response){
@@ -251,6 +227,23 @@
         searchSong(query);
       }
       /*******************************************/
+
+
+    var findRecipe = function(query)
+    {
+      var responseLabel = "";
+      var xmlhttp = new XMLHttpRequest();
+        
+      xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                writeAnswer(this.responseText);
+                annyang.start();
+            }
+      };
+      xmlhttp.open("GET", "recipe.php?q=" + query, true);
+      xmlhttp.send();
+    };
+
 
       //answer thingy
       function writeAnswer(input){
